@@ -1,0 +1,641 @@
+<?php
+
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* * ***************************Includes********************************* */
+require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+
+class freeCrystal extends eqLogic {
+    /*     * *************************Attributs****************************** */
+
+
+    /*     * ***********************Methode static*************************** */
+
+   
+
+    /*     * *********************Methode d'instance************************* */
+
+    /*     * **********************Getteur Setteur*************************** */
+	public static function AddDevice($Name,$_logicalId) 
+		{
+			$Equipement = self::byLogicalId($_logicalId, 'freeCrystal');
+			if (!is_object($Equipement)) {
+				$Equipement = new freeCrystal();
+				$Equipement->setName($Name);
+				$Equipement->setLogicalId($_logicalId);
+				$Equipement->setObject_id(null);
+				$Equipement->setEqType_name('freeCrystal');
+				$Equipement->setIsEnable(1);
+				$Equipement->setIsVisible(0);
+				$Equipement->save();
+			}
+			return $Equipement;
+		}
+	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string',$EventOnly=0) 
+		{
+		$Commande = $Equipement->getCmd("info",$_logicalId);
+		if (!is_object($Commande))
+			{
+			$Commande = new freeCrystalCmd();
+			$Commande->setId(null);
+			$Commande->setName($Name);
+			$Commande->setLogicalId($_logicalId);
+			$Commande->setEqLogic_id($Equipement->getId());
+			$Commande->setType($Type);
+			$Commande->setSubType($SubType);
+			}
+		$Commande->setIsHistorized($Equipement->getConfiguration('historize'));
+		$Commande->setEventOnly($EventOnly);
+		$Commande->save();
+		return $Commande;
+		}
+    public function getfreeCrystalInformation() 
+		{
+		$url = 'http://mafreebox.freebox.fr/pub/fbx_info.txt';
+		$tablo=file($url);  
+		for($loop=0; $loop<=count($tablo); $loop++)
+			{  
+			$ligne=trim(utf8_encode($tablo[$loop]));
+			switch($ligne)
+			{
+			case "Informations générales :":
+				$InformationsGenerales=freeCrystal::AddDevice("Informations générales","InformationsGenerales");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,8));
+				log::add('freeCrystal', 'debug', $value);
+				$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Modèle','Modele', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,20));
+				$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Version du firmware','VersionFirmware', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+			
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,18));
+				$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Mode de connection','ModeConnection', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,29));
+				$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Temps depuis la mise en route','TempsMiseRoute', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				break;	
+			case "Téléphone :":
+				$Telephone=freeCrystal::AddDevice("Téléphone","Telephone");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));	
+				$Commande=freeCrystal::AddCommmande($Telephone,'Etat','Etat', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,16));
+				$Commande=freeCrystal::AddCommmande($Telephone,'Etat du combiné','EtatCombine', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,8));
+				$Commande=freeCrystal::AddCommmande($Telephone,'Sonnerie','Sonnerie', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				break;	
+			case "Adsl :":
+				$Adsl=freeCrystal::AddDevice("Adsl","Adsl");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Adsl,'Etat','Etat', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,10));
+				$Commande=freeCrystal::AddCommmande($Adsl,'Protocole','Protocole', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Adsl,'Mode','Mode', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$loop++;
+				$loop++;
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,10));
+				//$value=split($value);
+				$Commande=freeCrystal::AddCommmande($Adsl,'Débit ATM ','DebitATM', "info",'numeric',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,14));
+				$Commande=freeCrystal::AddCommmande($Adsl,'Marge de bruit','MargeBruit', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,12));
+				$Commande=freeCrystal::AddCommmande($Adsl,'Atténuation','Attenuation', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Adsl,'FEC','FEC', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Adsl,'CRC','CRC', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Adsl,'HEC','HEC', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();     
+				break;	
+			case "Journal de connexion adsl :":
+				$JournalAdsl=freeCrystal::AddDevice("Journal de connexion adsl ","JournalAdsl ",1);
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,14));
+				$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 1','MiseRoute1', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,14));
+				$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 2','MiseRoute2', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();     
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,14));
+				$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 3','MiseRoute3', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   ;  
+				break;	
+			case "Wifi :":
+				$Wifi=freeCrystal::AddDevice("Wifi","Wifi");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Wifi,'Etat','Etat', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,8));
+				$Commande=freeCrystal::AddCommmande($Wifi,'Modèle','Modele', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,6));
+				$Commande=freeCrystal::AddCommmande($Wifi,'Canal','Canal', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event(trim(str_replace('Canal','',utf8_encode($tablo[$loop]))));
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,16));
+				$Commande=freeCrystal::AddCommmande($Wifi,'État du réseau','EtatReseau', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Wifi,'Ssid','Ssid', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,12));
+				$Commande=freeCrystal::AddCommmande($Wifi,'Type de clé','TypeCle', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,8));
+				$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi','FreeWifi', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,16));
+				$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi Secure','FreeWifiSecure', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				break;	
+			case "Réseau :":
+				$Reseau=freeCrystal::AddDevice("Réseau","Reseau");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,20));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse MAC Freebox','AdresseMACFreebox', "info",'string',0);
+				$Commande->setConfiguration('Mac',$value);
+				$Commande->save();  
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,10));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP','AdresseIP', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,5));
+				$Commande=freeCrystal::AddCommmande($Reseau,'IPv6','IPv6', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,12));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Mode routeur','ModeRouteur', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,16));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP privée','AdresseIPprivee', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,14));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP DMZ','AdresseIPDMZ', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,22));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP Freeplayer','AdresseIPFreeplayer', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,16));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Réponse au ping','RéponsePing', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,18));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Proxy Wake On Lan','ProxyWakeOnLan', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,12));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Serveur DHCP','ServeurDHCP', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,26));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Plage d\'adresses dynamique','PlageAdressesDynamique', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				
+			/*	$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($Reseau,'Etat','Etat', "info",'string');
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   */
+				break;	
+			case "Attributions dhcp :" :
+				$DHCP=freeCrystal::AddDevice("DHCP","DHCP");
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				while(true)
+					{	
+					log::add('freeCrystal', 'debug', strpos($ligne,'Redirections'));
+					log::add('freeCrystal', 'debug', $ligne);
+					$Mac=trim(substr($ligne,0,strpos($ligne,' ')));
+					$Ip=trim(substr($ligne,strpos($ligne,' ')));
+					if($Mac != '')
+						{
+						$Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary',0);	
+						$Commande->setConfiguration('Mac',$Mac);
+						$Commande->setConfiguration('Ip',$Ip);
+						$Commande->save(); 
+						}
+					$loop++;  
+					$ligne=trim(utf8_encode($tablo[$loop]));
+					if (strpos($ligne,'ports')>0)
+						break;
+					}
+				$loop--;
+				break;	
+			case "Redirections de ports :":
+				$Redirections=freeCrystal::AddDevice("Redirections de ports","Redirections");
+				$RedirectionsCmd=cmd::byEqLogicId($Redirections->getId());
+			//	foreach ($RedirectionsCmd as $Redirection)
+				//	$Redirection->remove();
+				log::add('freeCrystal', 'debug', $ligne);
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				while(true)
+					{	
+					$ligne = trim($ligne);
+					$ligne = str_replace("\t", " ", $ligne);
+					$ligne = eregi_replace("[ ]+", " ", $ligne);
+					log::add('freeCrystal', 'debug', $ligne);	
+					if($ligne != '')
+						{
+						$Information=split(' ',$ligne);
+						log::add('freeCrystal', 'debug', count($Information));	
+						$Name=$Information[0].'_'.$Information[1];					
+						$Commande=freeCrystal::AddCommmande($Redirections,$Name,$Name, "info",'string',0);
+						$Commande->setConfiguration('Protocole',$Information[0]);
+						$Commande->setConfiguration('PortSource',$Information[1]);
+						$Commande->setConfiguration('Destination',$Information[2]);
+						$Commande->setConfiguration('PortDestination',$Information[3]);
+						$Commande->setCollectDate('');
+						$Commande->event($ligne);
+						$Commande->save();   
+						}
+					$loop++;
+					$ligne=trim(utf8_encode($tablo[$loop]));
+					if (strpos($ligne,'réseau')>0)
+						break;
+					}
+				$loop--;
+				break;	
+			case "Interfaces réseau :":
+				$InterfacesReseau=freeCrystal::AddDevice("Interfaces réseau","InterfacesReseau");
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($InterfacesReseau,'WAN','WAN', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();  
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,8));
+				$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Ethernet','Ethernet', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,4));
+				$Commande=freeCrystal::AddCommmande($InterfacesReseau,'USB','USB', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				$loop++;
+				$ligne=trim(utf8_encode($tablo[$loop]));
+				log::add('freeCrystal', 'debug', $ligne);
+				$value=trim(substr($ligne,6));
+				$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Switch','Switch', "info",'string',1);
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();   
+				break;
+			}   
+		}
+	}
+}
+
+class freeCrystalCmd extends cmd {
+    /*     * *************************Attributs****************************** */
+
+
+    /*     * ***********************Methode static*************************** */
+	private function MacIsConnected($Mac) {
+			$request='sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
+			$request_shell = new com_shell($request . ' 2>&1');  
+			log::add('freeCrystal','debug','Execution de : '.$request_shell->getCmd());
+			$result = trim($request_shell->exec());
+			return $result;
+		}
+
+    /*     * *********************Methode d'instance************************* */
+
+    public function dontRemoveCmd() {
+        return true;
+    }
+
+    public function execute($_options = array()) {
+		
+	$Equipement=eqLogic::byId($this->getEqLogic_id());
+	switch($Equipement->getLogicalId())
+		{
+		case 'DHCP':
+		
+			$Mac=$this->getConfiguration('Mac');
+			$result = self::MacIsConnected($Mac);
+			if($this->execCmd(null,2) !=$result)
+				{
+				$this->setCollectDate('');
+				$this->event($result);
+				$this->save(); 
+				}
+		break;
+		case 'Redemarrage':
+			if ($this->getConfiguration('Code')!='')
+			{
+				$request='cd /usr/share/nginx/www/jeedom/plugins/freeCrystal/ressources/ && ';
+				$request.='./rebootFreebox.sh';
+				if($this->getLogicalId()=='Serveur')
+					$request.=" adsl ".$this->getConfiguration('Code');
+				if($this->getLogicalId()=='Player')
+					$request.=" hd ".$this->getConfiguration('Code');
+				$request_shell = new com_shell($request . ' 2>&1');  
+				$result = trim($request_shell->exec());
+			}
+		break;
+		case "Reseau":
+			if($this->getLogicalId() =='AdresseMACFreebox')
+			{
+				$Mac=$this->getConfiguration('Mac');
+				$result = self::MacIsConnected($Mac);
+				if($this->execCmd(null,2) !=$result)
+				{
+					$this->setCollectDate('');
+					$this->event($result);
+					$this->save(); 
+				}
+			}
+		}
+    return $result;
+    }
+
+    /*     * **********************Getteur Setteur*************************** */
+}
+
+?>

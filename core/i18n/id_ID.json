@@ -1,0 +1,19 @@
+{
+    "plugins/freeCrystal/plugin_info/info.xml": {
+        "Récupere les information de votre freebox Crystal": "Récupere les information de votre freebox Crystal",
+        "Aucune": "Tak ada"
+    },
+    "plugins/freeCrystal/desktop/php/freeCrystal.php": {
+        "Rechercher": "Mencari",
+        "Général": "Umum",
+        "Nom": "Nama",
+        "Objet parent": "Objek induk",
+        "Aucun": "Tak ada",
+        "Activer": "Mengaktifkan",
+        "Visible": "Terlihat",
+        "Historiser les données": "Historiser les données",
+        "Information": "Informasi",
+        "Supprimer": "Menghapus",
+        "Sauvegarder": "Menyimpan"
+    }
+}

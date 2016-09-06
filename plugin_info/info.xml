@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+    <id>freeCrystal</id>
+    <name>Freebox Crystal</name>
+    <description>Récupere les information de votre freebox Crystal</description>
+    <icon>icon techno-freebox</icon>
+    <licence>AGPL</licence>
+    <author>Halbout Michael</author>
+    <installation>Aucune</installation>
+    <require>1.145</require>
+    <canBeAction>0</canBeAction>
+    <version>0.10</version>
+    <category>monitoring</category>
+</info>
+

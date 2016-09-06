@@ -1,0 +1,19 @@
+{
+    "plugins/freeCrystal/plugin_info/info.xml": {
+        "Récupere les information de votre freebox Crystal": "Восстанавливает информацию с вашего Freebox Crystal",
+        "Aucune": "Нет"
+    },
+    "plugins/freeCrystal/desktop/php/freeCrystal.php": {
+        "Rechercher": "Искать",
+        "Général": "Главная",
+        "Nom": "Имя",
+        "Objet parent": "Родительский объект",
+        "Aucun": "Нет",
+        "Activer": "Активировать",
+        "Visible": "Видимый",
+        "Historiser les données": "Записать данные в Историю",
+        "Information": "Информация",
+        "Supprimer": "Удалить",
+        "Sauvegarder": "Сохранить"
+    }
+}
