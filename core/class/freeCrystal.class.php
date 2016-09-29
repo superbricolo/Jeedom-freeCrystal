@@ -1,35 +1,68 @@
 <?php
-
-/* This file is part of Jeedom.
- *
- * Jeedom is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
- */
-
-/* * ***************************Includes********************************* */
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class freeCrystal extends eqLogic {
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
-
-   
-
-    /*     * *********************Methode d'instance************************* */
-
-    /*     * **********************Getteur Setteur*************************** */
+	public static function dependancy_info() {
+		$return = array();
+		$return['log'] = 'freeCrystal_update';
+		if (exec('dpkg -s arp-scan | grep -c "Status: install"') ==1)
+				$return['state'] = 'ok';
+		else
+			$return['state'] = 'nok';
+		return $return;
+	}
+	public static function dependancy_install() {
+		if (file_exists('/tmp/compilation_Freebox_OS_in_progress')) {
+			return;
+		}
+		log::remove('Freebox_OS_update');
+		$cmd = 'sudo apt-get install  -y --force-yes arp-scan';
+		$cmd .= ' >> ' . log::getPathToLog('Freebox_OS_update') . ' 2>&1 &';
+		exec($cmd);
+	}
+	public static function deamon_info() {
+		$return = array();
+		$return['log'] = 'freeCrystal';		
+		if(trim(config::byKey('DemonSleep','freeCrystal'))!='')
+			$return['launchable'] = 'ok';
+		else
+			$return['launchable'] = 'nok';
+		$cron = cron::byClassAndFunction('freeCrystal', 'getfreeCrystalInformation');
+		if(is_object($cron) && $cron->running() )
+			$return['state'] = 'ok';
+		else 
+			$return['state'] = 'nok';
+		return $return;
+	}
+	public static function deamon_start($_debug = false) {
+		log::remove('freeCrystal');
+		self::deamon_stop();
+		$deamon_info = self::deamon_info();
+		if ($deamon_info['launchable'] != 'ok') 
+			return;
+		if ($deamon_info['state'] == 'ok') 
+			return;
+		$cron = cron::byClassAndFunction('freeCrystal', 'getfreeCrystalInformation');
+		if (!is_object($cron)) {
+			$cron = new cron();
+			$cron->setClass('freeCrystal');
+			$cron->setFunction('getfreeCrystalInformation');
+			$cron->setEnable(1);
+			$cron->setDeamon(1);
+			$cron->setSchedule('* * * * *');
+			$cron->setTimeout('999999');
+			$cron->save();
+		}
+		$cron->start();
+		$cron->run();
+	}
+	public static function deamon_stop() {
+		$cron = cron::byClassAndFunction('freeCrystal', 'getfreeCrystalInformation');
+		if (is_object($cron)) {
+			$cron->stop();
+			$cron->remove();
+		}
+	}
 	public static function AddDevice($Name,$_logicalId) 
 		{
 			$Equipement = self::byLogicalId($_logicalId, 'freeCrystal');
@@ -63,8 +96,8 @@ class freeCrystal extends eqLogic {
 		$Commande->save();
 		return $Commande;
 		}
-    public function getfreeCrystalInformation() 
-		{
+    public function getfreeCrystalInformation() {
+	    while(true){
 		$url = 'http://mafreebox.freebox.fr/pub/fbx_info.txt';
 		$tablo=file($url);  
 		for($loop=0; $loop<=count($tablo); $loop++)
@@ -569,6 +602,8 @@ class freeCrystal extends eqLogic {
 			}   
 		}
 	}
+	sleep(config::byKey('DemonSleep','freeCrystal'));
+    }
 }
 
 class freeCrystalCmd extends cmd {
