@@ -63,8 +63,7 @@ class freeCrystal extends eqLogic {
 			$cron->remove();
 		}
 	}
-	public static function AddDevice($Name,$_logicalId) 
-		{
+	public static function AddDevice($Name,$_logicalId) {
 			$Equipement = self::byLogicalId($_logicalId, 'freeCrystal');
 			if (!is_object($Equipement)) {
 				$Equipement = new freeCrystal();
@@ -78,8 +77,7 @@ class freeCrystal extends eqLogic {
 			}
 			return $Equipement;
 		}
-	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string',$EventOnly=0) 
-		{
+	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string',$EventOnly=0) {
 		$Commande = $Equipement->getCmd("info",$_logicalId);
 		if (!is_object($Commande))
 			{
@@ -107,6 +105,7 @@ class freeCrystal extends eqLogic {
 			{
 			case "Informations générales :":
 				$InformationsGenerales=freeCrystal::AddDevice("Informations générales","InformationsGenerales");
+				freeCrystal::AddCommmande($InformationsGenerales,'Redemarrage','Redemarrage', "action",'other',1);
 				log::add('freeCrystal', 'debug', $ligne);
 				$loop++;
 				$loop++;
@@ -511,7 +510,10 @@ class freeCrystal extends eqLogic {
 						$Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary',0);	
 						$Commande->setConfiguration('Mac',$Mac);
 						$Commande->setConfiguration('Ip',$Ip);
-						$Commande->save(); 
+						$value = self::MacIsConnected($Mac);
+						$Commande->setCollectDate('');
+						$Commande->event($value);
+						$Commande->save();
 						}
 					$loop++;  
 					$ligne=trim(utf8_encode($tablo[$loop]));
@@ -604,13 +606,6 @@ class freeCrystal extends eqLogic {
 	}
 	sleep(config::byKey('DemonSleep','freeCrystal'));
     }
-}
-
-class freeCrystalCmd extends cmd {
-    /*     * *************************Attributs****************************** */
-
-
-    /*     * ***********************Methode static*************************** */
 	private function MacIsConnected($Mac) {
 			$request='sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
 			$request_shell = new com_shell($request . ' 2>&1');  
@@ -618,6 +613,14 @@ class freeCrystalCmd extends cmd {
 			$result = trim($request_shell->exec());
 			return $result;
 		}
+	}
+
+class freeCrystalCmd extends cmd {
+    /*     * *************************Attributs****************************** */
+
+
+    /*     * ***********************Methode static*************************** */
+
 
     /*     * *********************Methode d'instance************************* */
 
@@ -627,22 +630,10 @@ class freeCrystalCmd extends cmd {
 
     public function execute($_options = array()) {
 		
-	$Equipement=eqLogic::byId($this->getEqLogic_id());
-	switch($Equipement->getLogicalId())
+	switch($this->getLogicalId())
 		{
-		case 'DHCP':
-		
-			$Mac=$this->getConfiguration('Mac');
-			$result = self::MacIsConnected($Mac);
-			if($this->execCmd(null,2) !=$result)
-				{
-				$this->setCollectDate('');
-				$this->event($result);
-				$this->save(); 
-				}
-		break;
 		case 'Redemarrage':
-			if ($this->getConfiguration('Code')!='')
+			if (config::byKey('Code','freeCrystal')!='')
 			{
 				$request='cd /usr/share/nginx/www/jeedom/plugins/freeCrystal/ressources/ && ';
 				$request.='./rebootFreebox.sh';
@@ -654,18 +645,6 @@ class freeCrystalCmd extends cmd {
 				$result = trim($request_shell->exec());
 			}
 		break;
-		case "Reseau":
-			if($this->getLogicalId() =='AdresseMACFreebox')
-			{
-				$Mac=$this->getConfiguration('Mac');
-				$result = self::MacIsConnected($Mac);
-				if($this->execCmd(null,2) !=$result)
-				{
-					$this->setCollectDate('');
-					$this->event($result);
-					$this->save(); 
-				}
-			}
 		}
     return $result;
     }
