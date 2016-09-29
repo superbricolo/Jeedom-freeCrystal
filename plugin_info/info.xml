@@ -11,5 +11,7 @@
     <canBeAction>0</canBeAction>
     <version>0.10</version>
     <category>monitoring</category>
+	<hasDependency>1</hasDependency>
+	<hasOwnDeamon>1</hasOwnDeamon>
 </info>
 
