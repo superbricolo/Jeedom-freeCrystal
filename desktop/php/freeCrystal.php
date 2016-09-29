@@ -10,7 +10,7 @@ $eqLogics = eqLogic::byType('freeCrystal');
         <div class="bs-sidebar">
             <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
                 <?php
-                foreach (eqLogic::byType('Freebox_OS') as $eqLogic) {
+                foreach ($eqLogics as $eqLogic) {
 					echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
                 }
                 ?>
