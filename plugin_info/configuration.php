@@ -14,6 +14,12 @@ if (!isConnect()) {
 				<input class="configKey form-control" data-l1key="DemonSleep"/>
 			</div>
 		</div> 
+		<div class="form-group">
+			<label class="col-lg-4 control-label">Code telecommande :</label>
+			<div class="col-lg-4">
+				<input class="configKey form-control" data-l1key="Code"/>
+			</div>
+		</div> 
    </fieldset>
 </form>
 
