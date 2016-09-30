@@ -9,7 +9,7 @@ if (!isConnect()) {
 <form class="form-horizontal">
     <fieldset>
 		<div class="form-group">
-			<label class="col-lg-4 control-label">Délais de afraichissement des informations :</label>
+			<label class="col-lg-4 control-label">Délais de afraichissement des informations (s) :</label>
 			<div class="col-lg-4">
 				<input class="configKey form-control" data-l1key="DemonSleep"/>
 			</div>
