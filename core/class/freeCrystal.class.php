@@ -16,8 +16,11 @@ class freeCrystal extends eqLogic {
 			return;
 		}
 		log::remove('Freebox_OS_update');
+		$cmd = 'sudo apt-get update upgrade -y --force-yes';
+		$cmd .= ' >> ' . log::getPathToLog('freeCrysta_update') . ' 2>&1 &';
+		exec($cmd);
 		$cmd = 'sudo apt-get install  -y --force-yes arp-scan';
-		$cmd .= ' >> ' . log::getPathToLog('Freebox_OS_update') . ' 2>&1 &';
+		$cmd .= ' >> ' . log::getPathToLog('freeCrysta_update') . ' 2>&1 &';
 		exec($cmd);
 	}
 	public static function deamon_info() {
@@ -511,6 +514,7 @@ class freeCrystal extends eqLogic {
 						$Commande->setConfiguration('Mac',$Mac);
 						$Commande->setConfiguration('Ip',$Ip);
 						$value = self::MacIsConnected($Mac);
+						log::add('freeCrystal','debug','Etat de '.$Commande->getName().': '.$value);
 						$Commande->setCollectDate('');
 						$Commande->event($value);
 						$Commande->save();
@@ -635,7 +639,7 @@ class freeCrystalCmd extends cmd {
 		case 'Redemarrage':
 			if (config::byKey('Code','freeCrystal')!='')
 			{
-				$request='cd /usr/share/nginx/www/jeedom/plugins/freeCrystal/ressources/ && ';
+				$request='cd '.dirname(__FILE__).'/../../ressources/ && ';
 				$request.='./rebootFreebox.sh';
 				if($this->getLogicalId()=='Serveur')
 					$request.=" adsl ".$this->getConfiguration('Code');
