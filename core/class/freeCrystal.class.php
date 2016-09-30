@@ -610,7 +610,7 @@ class freeCrystal extends eqLogic {
 	}
 	sleep(config::byKey('DemonSleep','freeCrystal'));
     }
-	private function MacIsConnected($Mac) {
+	private static function MacIsConnected($Mac) {
 			$request='sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
 			$request_shell = new com_shell($request . ' 2>&1');  
 			log::add('freeCrystal','debug','Execution de : '.$request_shell->getCmd());
