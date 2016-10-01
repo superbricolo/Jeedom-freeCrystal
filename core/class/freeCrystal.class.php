@@ -81,7 +81,7 @@ class freeCrystal extends eqLogic {
 			return $Equipement;
 		}
 	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string',$EventOnly=0) {
-		$Commande = $Equipement->getCmd("info",$_logicalId);
+		$Commande = $Equipement->getCmd(null,$_logicalId);
 		if (!is_object($Commande))
 			{
 			$Commande = new freeCrystalCmd();
@@ -93,7 +93,6 @@ class freeCrystal extends eqLogic {
 			$Commande->setSubType($SubType);
 			}
 		$Commande->setIsHistorized($Equipement->getConfiguration('historize'));
-		$Commande->setEventOnly($EventOnly);
 		$Commande->save();
 		return $Commande;
 		}
