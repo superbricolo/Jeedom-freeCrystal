@@ -5,23 +5,28 @@ class freeCrystal extends eqLogic {
 	public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'freeCrystal_update';
+		$return['progress_file'] = '/tmp/compilation_freeCrystal_in_progress';
 		if (exec('dpkg -s arp-scan | grep -c "Status: install"') ==1)
-				$return['state'] = 'ok';
+			$return['state'] = 'ok';
 		else
 			$return['state'] = 'nok';
 		return $return;
 	}
 	public static function dependancy_install() {
-		if (file_exists('/tmp/compilation_Freebox_OS_in_progress')) {
+		if (file_exists('/tmp/compilation_freeCrystal_in_progress')) {
 			return;
 		}
-		log::remove('Freebox_OS_update');
-		$cmd = 'sudo apt-get update upgrade -y --force-yes';
+		log::remove('freeCrystal_update');
+		exec('sudo echo 1 > /tmp/compilation_freeCrystal_in_progress');
+		$cmd = 'sudo apt-get update -y --force-yes';
 		$cmd .= ' >> ' . log::getPathToLog('freeCrysta_update') . ' 2>&1 &';
 		exec($cmd);
+		exec('sudo echo 50 > /tmp/compilation_freeCrystal_in_progress');
 		$cmd = 'sudo apt-get install  -y --force-yes arp-scan';
 		$cmd .= ' >> ' . log::getPathToLog('freeCrysta_update') . ' 2>&1 &';
 		exec($cmd);
+		exec('sudo echo 100 > /tmp/compilation_freeCrystal_in_progress');
+		exec('sudo rm /tmp/compilation_freeCrystal_in_progress');
 	}
 	public static function deamon_info() {
 		$return = array();
@@ -391,8 +396,9 @@ class freeCrystal extends eqLogic {
 				log::add('freeCrystal', 'debug', $ligne);
 				$value=trim(substr($ligne,20));
 				$Commande=freeCrystal::AddCommmande($Reseau,'Adresse MAC Freebox','AdresseMACFreebox', "info",'string',0);
-				$Commande->setConfiguration('Mac',$value);
-				$Commande->save();  
+				$Commande->setCollectDate('');
+				$Commande->event($value);
+				$Commande->save();
 				
 				$loop++;
 				$ligne=trim(utf8_encode($tablo[$loop]));
@@ -512,7 +518,7 @@ class freeCrystal extends eqLogic {
 						$Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary',0);	
 						$Commande->setConfiguration('Mac',$Mac);
 						$Commande->setConfiguration('Ip',$Ip);
-						$value = self::MacIsConnected($Mac);
+						$value = $Commande->getEqLogic()->MacIsConnected($Mac);
 						log::add('freeCrystal','debug','Etat de '.$Commande->getName().': '.$value);
 						$Commande->setCollectDate('');
 						$Commande->event($value);
@@ -609,14 +615,13 @@ class freeCrystal extends eqLogic {
 	}
 	sleep(config::byKey('DemonSleep','freeCrystal'));
     }
-	private static function MacIsConnected($Mac) {
-			$request='sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
-			$request_shell = new com_shell($request . ' 2>&1');  
-			log::add('freeCrystal','debug','Execution de : '.$request_shell->getCmd());
-			$result = trim($request_shell->exec());
-			return $result;
-		}
+	private function MacIsConnected($Mac) {
+		$cmd = 'sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
+		$cmd .= ' >> ' . log::getPathToLog('freeCrystal') . ' 2>&1 &';
+		$result = trim(exec($cmd));
+		return $result;
 	}
+}
 
 class freeCrystalCmd extends cmd {
     /*     * *************************Attributs****************************** */
