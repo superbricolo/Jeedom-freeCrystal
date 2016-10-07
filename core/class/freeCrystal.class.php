@@ -388,6 +388,7 @@ class freeCrystal extends eqLogic {
 							log::add('freeCrystal', 'debug', $ligne);
 							$loop++;
 							$loop++;
+							
 							$loop++;
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
@@ -423,6 +424,7 @@ class freeCrystal extends eqLogic {
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
+							
 							$loop++;
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
