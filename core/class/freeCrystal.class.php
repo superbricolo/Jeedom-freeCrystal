@@ -611,7 +611,7 @@ class freeCrystal extends eqLogic {
     }
 	private function MacIsConnected($Mac) {
 		$result =false;
-		$cmd = 'sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
+		$cmd = 'sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l 2>&1';
 		//$cmd .= ' >> ' . log::getPathToLog('freeCrystal');
 		exec($cmd,$result);
 		log::add('freeCrystal','debug', json_encode($result));
