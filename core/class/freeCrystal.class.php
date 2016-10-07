@@ -614,7 +614,7 @@ class freeCrystal extends eqLogic {
 		$cmd = 'sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l';
 		$cmd .= ' >> ' . log::getPathToLog('freeCrystal');
 		 exec($cmd,$result);
-		return $result;
+		return $result[0];
 	}
 }
 
