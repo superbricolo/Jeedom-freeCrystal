@@ -82,7 +82,7 @@ function printFreecrystal(_freeCrystal_id) {
 						.append($('<td>').text(data.result.cmd[i].value)));
 					break;
 					case 'Réseau':
-					/*if (data.result.cmd[i].name =="Adresse MAC Freebox")
+					if (data.result.cmd[i].name =="Adresse MAC Freebox")
 					{
 						tbody.append($('<tr>')
 							.append($('<td>').text(data.result.cmd[i].name))
@@ -95,7 +95,7 @@ function printFreecrystal(_freeCrystal_id) {
 							.append($('<td>').text(data.result.cmd[i].name))
 							.append($('<td>').text(data.result.cmd[i].value))
 							.append($('<td>').text('')));
-					}*/
+					}
 					break;
 					case 'Redirections de ports':
 					thead.append($('<tr>')
