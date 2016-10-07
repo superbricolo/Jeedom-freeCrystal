@@ -455,7 +455,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Réponse au ping','RéponsePing', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Réponse au ping','ReponsePing', "info",'string',1);
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
