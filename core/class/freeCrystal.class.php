@@ -428,11 +428,11 @@ class freeCrystal extends eqLogic {
 							$loop++;
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
-							$value=htmlentities(trim(substr($ligne,16)));
+							/*$value=htmlentities(trim(substr($ligne,16)));
 							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP privée','AdresseIPprivee', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
-							$Commande->save();   
+							$Commande->save();   */
 							
 							$loop++;
 							$ligne=trim(utf8_encode($tablo[$loop]));
