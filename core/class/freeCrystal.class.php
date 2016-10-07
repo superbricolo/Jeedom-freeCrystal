@@ -85,7 +85,7 @@ class freeCrystal extends eqLogic {
 			}
 			return $Equipement;
 		}
-	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string',$EventOnly=0) {
+	public static function AddCommmande($Equipement,$Name,$_logicalId, $Type="info",$SubType='string') {
 		$Commande = $Equipement->getCmd(null,$_logicalId);
 		if (!is_object($Commande))
 			{
@@ -97,7 +97,6 @@ class freeCrystal extends eqLogic {
 			$Commande->setType($Type);
 			$Commande->setSubType($SubType);
 			}
-		$Commande->setIsHistorized($Equipement->getConfiguration('historize'));
 		$Commande->save();
 		return $Commande;
 		}
@@ -110,7 +109,7 @@ class freeCrystal extends eqLogic {
 					switch($ligne){
 						case "Informations générales :":
 							$InformationsGenerales=freeCrystal::AddDevice("Informations générales","InformationsGenerales");
-							freeCrystal::AddCommmande($InformationsGenerales,'Redemarrage','Redemarrage', "action",'other',1);
+							freeCrystal::AddCommmande($InformationsGenerales,'Redemarrage','Redemarrage', "action",'other');
 							log::add('freeCrystal', 'debug', $ligne);
 							$loop++;
 							$loop++;
@@ -119,7 +118,7 @@ class freeCrystal extends eqLogic {
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,8));
 							log::add('freeCrystal', 'debug', $value);
-							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Modèle','Modele', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Modèle','Modele', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -128,7 +127,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,20));
-							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Version du firmware','VersionFirmware', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Version du firmware','VersionFirmware', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -137,7 +136,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,18));
-							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Mode de connection','ModeConnection', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Mode de connection','ModeConnection', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -146,7 +145,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,29));
-							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Temps depuis la mise en route','TempsMiseRoute', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InformationsGenerales,'Temps depuis la mise en route','TempsMiseRoute', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -160,7 +159,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));	
-							$Commande=freeCrystal::AddCommmande($Telephone,'Etat','Etat', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Telephone,'Etat','Etat', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -169,7 +168,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Telephone,'Etat du combiné','EtatCombine', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Telephone,'Etat du combiné','EtatCombine', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -178,7 +177,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,8));
-							$Commande=freeCrystal::AddCommmande($Telephone,'Sonnerie','Sonnerie', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Telephone,'Sonnerie','Sonnerie', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -192,7 +191,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Adsl,'Etat','Etat', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Etat','Etat', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -201,7 +200,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,10));
-							$Commande=freeCrystal::AddCommmande($Adsl,'Protocole','Protocole', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Protocole','Protocole', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -210,7 +209,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Adsl,'Mode','Mode', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Mode','Mode', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -224,7 +223,7 @@ class freeCrystal extends eqLogic {
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,10));
 							//$value=split($value);
-							$Commande=freeCrystal::AddCommmande($Adsl,'Débit ATM ','DebitATM', "info",'numeric',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Débit ATM ','DebitATM', "info",'numeric');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -233,7 +232,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,14));
-							$Commande=freeCrystal::AddCommmande($Adsl,'Marge de bruit','MargeBruit', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Marge de bruit','MargeBruit', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -242,7 +241,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,12));
-							$Commande=freeCrystal::AddCommmande($Adsl,'Atténuation','Attenuation', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'Atténuation','Attenuation', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -251,7 +250,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Adsl,'FEC','FEC', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'FEC','FEC', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -260,7 +259,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Adsl,'CRC','CRC', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'CRC','CRC', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -269,13 +268,13 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Adsl,'HEC','HEC', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Adsl,'HEC','HEC', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();     
 						break;	
 						case "Journal de connexion adsl :":
-							$JournalAdsl=freeCrystal::AddDevice("Journal de connexion adsl ","JournalAdsl ",1);
+							$JournalAdsl=freeCrystal::AddDevice("Journal de connexion adsl ","JournalAdsl");
 							log::add('freeCrystal', 'debug', $ligne);
 							$loop++;
 							$loop++;
@@ -284,7 +283,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,14));
-							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 1','MiseRoute1', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 1','MiseRoute1', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -293,7 +292,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,14));
-							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 2','MiseRoute2', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 2','MiseRoute2', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();     
@@ -302,7 +301,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,14));
-							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 3','MiseRoute3', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($JournalAdsl,'Mise en route 3','MiseRoute3', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   ;  
@@ -316,7 +315,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Wifi,'Etat','Etat', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'Etat','Etat', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -325,7 +324,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,8));
-							$Commande=freeCrystal::AddCommmande($Wifi,'Modèle','Modele', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'Modèle','Modele', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -334,7 +333,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,6));
-							$Commande=freeCrystal::AddCommmande($Wifi,'Canal','Canal', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'Canal','Canal', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event(trim(str_replace('Canal','',utf8_encode($tablo[$loop]))));
 							$Commande->save();   
@@ -343,7 +342,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Wifi,'État du réseau','EtatReseau', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'État du réseau','EtatReseau', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -352,7 +351,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($Wifi,'Ssid','Ssid', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'Ssid','Ssid', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -361,7 +360,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,12));
-							$Commande=freeCrystal::AddCommmande($Wifi,'Type de clé','TypeCle', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'Type de clé','TypeCle', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -370,7 +369,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,8));
-							$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi','FreeWifi', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi','FreeWifi', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -379,7 +378,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi Secure','FreeWifiSecure', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Wifi,'FreeWifi Secure','FreeWifiSecure', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -393,7 +392,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,20));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse MAC Freebox','AdresseMACFreebox', "info",'string',0);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse MAC Freebox','AdresseMACFreebox', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();
@@ -402,7 +401,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,10));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP','AdresseIP', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP','AdresseIP', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -411,7 +410,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,5));
-							$Commande=freeCrystal::AddCommmande($Reseau,'IPv6','IPv6', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'IPv6','IPv6', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -420,15 +419,15 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,12));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Mode routeur','ModeRouteur', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Mode routeur','ModeRouteur', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
 							$loop++;
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
-							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP privée','AdresseIPprivee', "info",'string',1);
+							$value=htmlentities(trim(substr($ligne,16)));
+							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP privée','AdresseIPprivee', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -437,7 +436,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,14));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP DMZ','AdresseIPDMZ', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP DMZ','AdresseIPDMZ', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -446,7 +445,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,22));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP Freeplayer','AdresseIPFreeplayer', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Adresse IP Freeplayer','AdresseIPFreeplayer', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -455,7 +454,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,16));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Réponse au ping','ReponsePing', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Réponse au ping','ReponsePing', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -464,7 +463,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,18));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Proxy Wake On Lan','ProxyWakeOnLan', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Proxy Wake On Lan','ProxyWakeOnLan', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -473,7 +472,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,12));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Serveur DHCP','ServeurDHCP', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Serveur DHCP','ServeurDHCP', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -482,7 +481,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,26));
-							$Commande=freeCrystal::AddCommmande($Reseau,'Plage d\'adresses dynamique','PlageAdressesDynamique', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($Reseau,'Plage d\'adresses dynamique','PlageAdressesDynamique', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -511,7 +510,7 @@ class freeCrystal extends eqLogic {
 								$Mac=trim(substr($ligne,0,strpos($ligne,' ')));
 								$Ip=trim(substr($ligne,strpos($ligne,' ')));
 								if($Mac != ''){
-									$Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary',0);	
+									$Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary');	
 									$Commande->setConfiguration('Mac',$Mac);
 									$Commande->setConfiguration('Ip',$Ip);
 									$value = $Commande->getEqLogic()->MacIsConnected($Mac);
@@ -548,7 +547,7 @@ class freeCrystal extends eqLogic {
 									$Information=split(' ',$ligne);
 									log::add('freeCrystal', 'debug', count($Information));	
 									$Name=$Information[0].'_'.$Information[1];					
-									$Commande=freeCrystal::AddCommmande($Redirections,$Name,$Name, "info",'string',0);
+									$Commande=freeCrystal::AddCommmande($Redirections,$Name,$Name, "info",'string');
 									$Commande->setConfiguration('Protocole',$Information[0]);
 									$Commande->setConfiguration('PortSource',$Information[1]);
 									$Commande->setConfiguration('Destination',$Information[2]);
@@ -575,7 +574,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'WAN','WAN', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'WAN','WAN', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();  
@@ -583,7 +582,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,8));
-							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Ethernet','Ethernet', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Ethernet','Ethernet', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -591,7 +590,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,4));
-							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'USB','USB', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'USB','USB', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -599,7 +598,7 @@ class freeCrystal extends eqLogic {
 							$ligne=trim(utf8_encode($tablo[$loop]));
 							log::add('freeCrystal', 'debug', $ligne);
 							$value=trim(substr($ligne,6));
-							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Switch','Switch', "info",'string',1);
+							$Commande=freeCrystal::AddCommmande($InterfacesReseau,'Switch','Switch', "info",'string');
 							$Commande->setCollectDate('');
 							$Commande->event($value);
 							$Commande->save();   
@@ -608,7 +607,7 @@ class freeCrystal extends eqLogic {
 				}
 			sleep(config::byKey('DemonSleep','freeCrystal'));
 		}
-    }
+	}
 	private function MacIsConnected($Mac) {
 		$result =false;
 		$cmd = 'sudo /usr/bin/arp-scan -l -g --retry=5 -T '.$Mac.' -t 800 | grep -i '.$Mac.' | wc -l 2>&1';
