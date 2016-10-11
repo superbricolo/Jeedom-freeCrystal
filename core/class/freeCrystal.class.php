@@ -631,10 +631,8 @@ class freeCrystalCmd extends cmd {
 				if (config::byKey('Code','freeCrystal')!=''){
 					$request='cd '.dirname(__FILE__).'/../../ressources/ && ';
 					$request.='./rebootFreebox.sh';
-					if($this->getLogicalId()=='Serveur')
-						$request.=" adsl ".$this->getConfiguration('Code');
-					if($this->getLogicalId()=='Player')
-						$request.=" hd ".$this->getConfiguration('Code');
+					//$request.=" adsl ".config::byKey('Code','freeCrystal');
+					$request.=" hd ".config::byKey('Code','freeCrystal');
 					$request_shell = new com_shell($request . ' 2>&1');  
 					$result = trim($request_shell->exec());
 				}
