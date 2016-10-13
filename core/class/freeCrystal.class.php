@@ -629,12 +629,16 @@ class freeCrystalCmd extends cmd {
 		switch($this->getLogicalId()){
 			case 'Redemarrage':
 				if (config::byKey('Code','freeCrystal')!=''){
-					$request='cd '.dirname(__FILE__).'/../../ressources/ && ';
-					$request.='./rebootFreebox.sh';
-					//$request.=" adsl ".config::byKey('Code','freeCrystal');
-					$request.=" hd ".config::byKey('Code','freeCrystal');
-					$request_shell = new com_shell($request . ' 2>&1');  
-					$result = trim($request_shell->exec());
+					
+					$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/rebootFreebox.sh';
+					$cmd .=" hd ". config::byKey('Code','freeCrystal');
+					$cmd .= ' >> ' . log::getPathToLog('freeCrystal') . ' 2>&1 &';
+					exec($cmd);
+					
+					$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/rebootFreebox.sh';
+					$cmd. =" adsl ".config::byKey('Code','freeCrystal');
+					$cmd .= ' >> ' . log::getPathToLog('freeCrystal') . ' 2>&1 &';
+					exec($cmd);
 				}
 			break;
 		}
