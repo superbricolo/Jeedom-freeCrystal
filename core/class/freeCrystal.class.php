@@ -636,7 +636,7 @@ class freeCrystalCmd extends cmd {
 					exec($cmd);
 					
 					$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/rebootFreebox.sh';
-					$cmd. =" adsl ".config::byKey('Code','freeCrystal');
+					$cmd .=" adsl ".config::byKey('Code','freeCrystal');
 					$cmd .= ' >> ' . log::getPathToLog('freeCrystal') . ' 2>&1 &';
 					exec($cmd);
 				}
