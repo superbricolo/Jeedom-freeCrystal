@@ -7,13 +7,13 @@
         "Rechercher": "Search",
         "Général": "General",
         "Nom": "Name",
-        "Objet parent": "Objet parent",
-        "Aucun": "Aucun",
-        "Activer": "Activer",
+        "Objet parent": "Parent object",
+        "Aucun": "None",
+        "Activer": "Enable",
         "Visible": "Visible",
-        "Historiser les données": "Historiser les données",
-        "Information": "Information",
-        "Supprimer": "Supprimer",
-        "Sauvegarder": "Sauvegarder"
+        "Historiser les données": "Logging datas",
+        "Information": "Informations",
+        "Supprimer": "Delete",
+        "Sauvegarder": "Save"
     }
 }
