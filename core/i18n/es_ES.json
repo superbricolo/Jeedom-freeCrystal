@@ -1,19 +1,19 @@
 {
     "plugins\/freeCrystal\/plugin_info\/info.xml": {
-        "Récupere les information de votre freebox Crystal": "Récupere les information de votre freebox Crystal",
-        "Aucune": "Aucune"
+        "Récupere les information de votre freebox Crystal": "Obtener la información de su freebox cristal",
+        "Aucune": "Ninguno"
     },
     "plugins\/freeCrystal\/desktop\/php\/freeCrystal.php": {
-        "Rechercher": "Rechercher",
-        "Général": "Général",
-        "Nom": "Nom",
-        "Objet parent": "Objet parent",
-        "Aucun": "Aucun",
-        "Activer": "Activer",
+        "Rechercher": "Buscar",
+        "Général": "General",
+        "Nom": "Nombre",
+        "Objet parent": "Objeto padre",
+        "Aucun": "Ninguno",
+        "Activer": "Activar",
         "Visible": "Visible",
-        "Historiser les données": "Historiser les données",
-        "Information": "Information",
-        "Supprimer": "Supprimer",
-        "Sauvegarder": "Sauvegarder"
+        "Historiser les données": "Historizar los datos",
+        "Information": "Información",
+        "Supprimer": "Borrar",
+        "Sauvegarder": "Salvar"
     }
 }
