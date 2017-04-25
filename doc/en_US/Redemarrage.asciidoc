@@ -1,4 +1,4 @@
-Pour le redemarage des freebox (serveur et Player) il est nécessaire de donné les droit au script
+To reboot the freebox (server and Player) it is necessary to give the right to the script
 ----
 #sudo chmod -R 777 /usr/share/nginx/www/jeedom/plugins/freeCrystal/ressources/
 ----

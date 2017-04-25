@@ -17,11 +17,8 @@ class freeCrystal extends eqLogic {
                         return;
                 }
                 log::remove('freeCrystal_update');
+                exec('sudo touch /tmp/compilation_freeCrystal_in_progress');
                 exec('sudo echo 1 > /tmp/compilation_freeCrystal_in_progress');
-                $cmd = 'sudo apt-get update -y --force-yes';
-                $cmd .= ' >> ' . log::getPathToLog('freeCrystal_update') . ' 2>&1 &';
-                exec($cmd);
-                exec('sudo echo 50 > /tmp/compilation_freeCrystal_in_progress');
                 $cmd = 'sudo apt-get install  -y --force-yes arp-scan';
                 $cmd .= ' >> ' . log::getPathToLog('freeCrystal_update') . ' 2>&1 &';
                 exec($cmd);

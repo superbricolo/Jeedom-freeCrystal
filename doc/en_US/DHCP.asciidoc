@@ -1,5 +1,5 @@
-Pour que le service de verification de présence des adresse DHCP fonctionne il est necessaire d'installer arp-scan
-Dans un terminal :
+For the service of checking for presence of DHCP address works it is necessary to install arp-scan
+In a terminal:
 ----
 # sudo apt-get install arp-scan  #installation du paquet permetant de scanner le réseaux
 # sudo visudo -s
