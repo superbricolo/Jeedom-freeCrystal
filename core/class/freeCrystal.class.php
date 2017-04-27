@@ -99,9 +99,11 @@ class freeCrystal extends eqLogic {
                 }
     public function getfreeCrystalInformation() {
             while(true){
+                  $ScanDHCP = config::byKey('ScanDHCP', 'freeCrystal');
+                  //log::add('freeCrystal', 'debug', 'ScanDHCP : '.$ScanDHCP);
                         $url = 'http://mafreebox.freebox.fr/pub/fbx_info.txt';
                         $tablo=file($url);
-                                for($loop=0; $loop<=count($tablo); $loop++){
+                                for($loop=0; $loop<count($tablo); $loop++){
                                         $ligne=trim(utf8_encode($tablo[$loop]));
                                         switch($ligne){
                                                 case "Informations générales :":
@@ -532,7 +534,7 @@ class freeCrystal extends eqLogic {
                                                                         $Commande=freeCrystal::AddCommmande($DHCP,$Mac,str_replace(':','',$Mac), "info",'binary');
                                                                         $Commande->setConfiguration('Mac',$Mac);
                                                                         $Commande->setConfiguration('Ip',$Ip);
-                                                                        $value = $Commande->getEqLogic()->MacIsConnected($Mac);
+                                                                        $value = $Commande->getEqLogic()->MacIsConnected($Mac,$ScanDHCP);
                                                                         log::add('freeCrystal','debug','Etat de '.$Commande->getName().' => '.$value);
                                                                         $Commande->setCollectDate('');
                                                                         $Commande->event($value);
@@ -563,14 +565,14 @@ class freeCrystal extends eqLogic {
                                                                 $ligne = eregi_replace("[ ]+", " ", $ligne);
                                                                 log::add('freeCrystal', 'debug', $ligne);
                                                                 if($ligne != ''){
-                                                                        $Information=split(' ',$ligne);
-                                                                        log::add('freeCrystal', 'debug', count($Information));
-                                                                        $Name=$Information[0].'_'.$Information[1];
+                                                                        $Informations=explode(' ',$ligne);
+                                                                        //log::add('freeCrystal', 'debug', count($Informations));
+                                                                        $Name=$Informations[0].'_'.@$Informations[1];
                                                                         $Commande=freeCrystal::AddCommmande($Redirections,$Name,$Name, "info",'string');
-                                                                        $Commande->setConfiguration('Protocole',$Information[0]);
-                                                                        $Commande->setConfiguration('PortSource',$Information[1]);
-                                                                        $Commande->setConfiguration('Destination',$Information[2]);
-                                                                        $Commande->setConfiguration('PortDestination',$Information[3]);
+                                                                        $Commande->setConfiguration('Protocole',@$Informations[0]);
+                                                                        $Commande->setConfiguration('PortSource',@$Informations[1]);
+                                                                        $Commande->setConfiguration('Destination',@$Informations[2]);
+                                                                        $Commande->setConfiguration('PortDestination',@$Informations[3]);
                                                                         $Commande->setCollectDate('');
                                                                         $Commande->event($ligne);
                                                                         $Commande->save();
@@ -642,11 +644,13 @@ class freeCrystal extends eqLogic {
                         sleep(config::byKey('DemonSleep','freeCrystal'));
                 }
         }
-        private function MacIsConnected($Mac) {
+        private function MacIsConnected($Mac,$ScanDHCP) {
                 $result =false;
                 $cmd = 'sudo /usr/bin/arp-scan -l -g --retry=3 -T '.$Mac.' -t 500 | grep -i '.$Mac.' | wc -l 2>&1';
                 //$cmd .= ' >> ' . log::getPathToLog('freeCrystal');
-                exec($cmd,$result);
+            if ($ScanDHCP) {
+               exec($cmd,$result);
+            }
                 //log::add('freeCrystal','debug', json_encode($result));
                 return $result[0];
         }
