@@ -1,0 +1,11 @@
+{
+	"id" : "freeCrystal",
+	"name" : "Freebox Crystal",
+	"description" : "Récupere les information de votre freebox Crystal",
+	"licence" : "AGPL",
+	"author" : "Halbout Michael",
+	"require" : "3.0",
+	"category" : "monitoring",
+	"hasOwnDeamon" : true,
+	"hasDependency" : true
+}
