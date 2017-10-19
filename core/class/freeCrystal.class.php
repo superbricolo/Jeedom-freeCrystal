@@ -674,7 +674,7 @@ class freeCrystalCmd extends cmd {
                                 }
                         break;
                 }
-                return $result;
+                return;
     }
 }
 
